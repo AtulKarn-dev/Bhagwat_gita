@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/chapter_list.dart';
 import 'package:flutter_application_1/responses/chapter_response.dart';
 import 'package:flutter_application_1/pages/splash_screen.dart';
+import 'package:flutter_application_1/widget/show_more.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             leading: Text((index + 1).toString()),
                             title: Text(
-                              data.nameMeaning.split("\"")[1],
+                              data.nameMeaning.replaceAll('"',''),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16,
@@ -76,8 +77,9 @@ class _HomePageState extends State<HomePage> {
                              const SizedBox(
                                 height: 15,
                               ),
-                              Text(data.chapterSummary,
-                                  maxLines: 3, overflow: TextOverflow.ellipsis),
+                              DescriptionTextWidget(
+                                text: data.chapterSummary,
+                              ),
                             ]),
                             trailing: const Icon(Icons.arrow_forward_ios),
                           ),

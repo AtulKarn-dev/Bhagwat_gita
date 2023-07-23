@@ -23,11 +23,6 @@ class _ChapterListState extends State<ChapterList> {
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +40,6 @@ class _ChapterListState extends State<ChapterList> {
             if (snapshot.hasData) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-
-                // Text('Chapter: ${snapshot.data![1].chapterNumber}',
-                //     style: const TextStyle(
-                //         fontWeight: FontWeight.bold, fontSize: 22)),
                 child: ListView.separated(
                     itemCount: snapshot.data!.length,
                     separatorBuilder: (context, index) {
@@ -68,14 +59,6 @@ class _ChapterListState extends State<ChapterList> {
                         )),
                         subtitle: Column(
                           children: [
-                            // SizedBox(
-                            //   height: 10,
-                            // ),
-                            // Text(
-                            //   'Verse: ${data.verseNumber}',
-                            //   style: TextStyle(
-                            //       fontWeight: FontWeight.w800, fontSize: 16),
-                            // ),
                             SizedBox(
                               height: 5,
                             ),
@@ -95,8 +78,8 @@ class _ChapterListState extends State<ChapterList> {
                                   color: Color.fromARGB(255, 227, 153, 41)),
                             ),
                             Text(
-                              data.transliteration.replaceAll('\n', ''),
-                              textAlign: TextAlign.justify,
+                              data.transliteration,
+                              
                             ),
                             SizedBox(
                               height: 10,
