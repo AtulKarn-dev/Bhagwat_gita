@@ -21,7 +21,7 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
 
     if (widget.text!.length > 150) {
       firstHalf = widget.text!.substring(0, 150);
-      secondHalf = widget.text!.substring(100, widget.text!.length);
+      secondHalf = widget.text!.substring(150, widget.text!.length);
     } else {
       firstHalf = widget.text;
       secondHalf = "";
@@ -37,19 +37,19 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
           : Column(
               children: <Widget>[
                 Text(flag ? ("${firstHalf!}...") : (firstHalf! + secondHalf!),textAlign: TextAlign.justify,),
-                InkWell(
-                  child: Align(
-                    alignment: Alignment.centerRight,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
                     child: Text(
                       flag ? "show more" : "show less",
                       style: TextStyle(color: Colors.orange),
                     ),
+                    onTap: () {
+                      setState(() {
+                        flag = !flag;
+                      });
+                    },
                   ),
-                  onTap: () {
-                    setState(() {
-                      flag = !flag;
-                    });
-                  },
                 ),
               ],
             ),
