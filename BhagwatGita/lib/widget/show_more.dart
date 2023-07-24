@@ -39,7 +39,7 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
                 Text(flag ? ("${firstHalf!}...") : (firstHalf! + secondHalf!),textAlign: TextAlign.justify,),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: InkWell(
+                  child: GestureDetector(
                     child: Text(
                       flag ? "show more" : "show less",
                       style: const TextStyle(color: Colors.orange),
