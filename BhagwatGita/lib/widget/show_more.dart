@@ -42,7 +42,7 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
                   child: InkWell(
                     child: Text(
                       flag ? "show more" : "show less",
-                      style: TextStyle(color: Colors.orange),
+                      style: const TextStyle(color: Colors.orange),
                     ),
                     onTap: () {
                       setState(() {
