@@ -1,5 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/constant.dart';
+import 'package:flutter_application_1/database/db.dart';
+import 'package:flutter_application_1/pages/username.dart';
 import 'package:flutter_application_1/responses/auth.dart';
+import 'package:flutter_application_1/storage/secure_storage.dart';
 import 'dart:math' as math;
 import 'dart:async';
 import 'home_page.dart';
@@ -16,35 +21,51 @@ class Splashscreen extends StatefulWidget {
 
 class _SplashscreenState extends State<Splashscreen> {
   Future<bool> getdata() async {
-    http.Response response = await http
-        .post(Uri.parse('https://bhagavadgita.io/auth/oauth/token'), body: {
-      'client_id': 'MmApEMWzZSLWcCgS7XSl0Ol2oP8noBR90k15bw8M',
-      'client_secret': '6qDR3UXt3UWOPIeK7a1aq2IH0Xsghg2jfOdwRAoCG6u69X8Qbh',
-      'grant_type': 'client_credentials',
-      'scope': 'verse chapter'
-    });
-    if (response.statusCode == 200) {
-      Token token1 = tokenFromJson(response.body);
-      token = token1.accessToken;
-      return true;
+    if ((await SQLiteDbProvider.db.queryAllRow(tblChapter)).isEmpty) {
+      http.Response response = await http
+          .post(Uri.parse('https://bhagavadgita.io/auth/oauth/token'), body: {
+        'client_id': 'MmApEMWzZSLWcCgS7XSl0Ol2oP8noBR90k15bw8M',
+        'client_secret': '6qDR3UXt3UWOPIeK7a1aq2IH0Xsghg2jfOdwRAoCG6u69X8Qbh',
+        'grant_type': 'client_credentials',
+        'scope': 'verse chapter'
+      });
+      if (response.statusCode == 200) {
+        Token token1 = tokenFromJson(response.body);
+        token = token1.accessToken;
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      return true;
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getdata().then((v) {
-      if (v == true) {
-        Timer(
-            const Duration(seconds: 1),
-            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) => const HomePage())));
-      } else {
-        //alert dialog there is some issue
-      }
+    _init().then((v) {
+      getdata().then((v) {
+        if (v == true) {
+          Timer(const Duration(seconds: 1), () async {
+            if ((await SecureStorage().readData(storageUsername) ?? "") != "") {
+              SecureStorage().readData(storageUsername);
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => const HomePage()));
+            } else {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => const UserName()));
+            }
+          });
+        } else {
+          //alert dialog there is some issue
+        }
+      });
     });
+  }
+
+  Future<void> _init() async {
+    await SQLiteDbProvider.db.initDB();
   }
 
   @override

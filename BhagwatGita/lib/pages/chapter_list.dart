@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/responses/chapter_verse_response.dart';
 import 'package:http/http.dart' as http;
+import '../constant.dart';
+import '../database/db.dart';
 import 'splash_screen.dart';
 
 class ChapterList extends StatefulWidget {
@@ -14,15 +16,32 @@ class ChapterList extends StatefulWidget {
 
 class _ChapterListState extends State<ChapterList> {
   Future<List<ChapterVerse>?> getChapterVerse() async {
-    http.Response response = await http.get(Uri.parse(
-        'https://bhagavadgita.io/api/v1/chapters/${widget.id}/verses?access_token=$token'));
-    if (response.statusCode == 200) {
-      return chapterVerseFromJson(response.body);
-    } else {
-      return null;
-    }
-  }
+    print('from db');
+    // if ((await SQLiteDbProvider.db.queryAllRow(tblVerse)).isNotEmpty) {
+    List<Map<String, dynamic>> chapterMapList = await SQLiteDbProvider.db
+        .queryAllRowWithId(tblVerse, int.parse(widget.id));
 
+    List<ChapterVerse> chapterVerse = [];
+    for (Map<String, dynamic> verse in chapterMapList) {
+      chapterVerse.add(ChapterVerse.fromJson(verse));
+      print(ChapterVerse.fromJson(verse).chapterNumber);
+    }
+    return chapterVerse;
+    // } else {
+    //   http.Response response = await http.get(Uri.parse(
+    //       'https://bhagavadgita.io/api/v1/chapters/${widget.id}/verses?access_token=$token'));
+    //   if (response.statusCode == 200) {
+    //     List<ChapterVerse> chapterVerse = chapterVerseFromJson(response.body);
+
+    //     for (ChapterVerse verse in chapterVerse) {
+    //       SQLiteDbProvider.db.insert(tblVerse, verse.toJson());
+    //     }
+    //     return chapterVerse;
+    //   } else {
+    //     return null;
+    //   }
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,34 +73,33 @@ class _ChapterListState extends State<ChapterList> {
                         title: Center(
                             child: Text(
                           'Verse: ${data.verseNumber}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.w800, fontSize: 16),
                         )),
                         subtitle: Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Text(
                               data.meaning,
                               textAlign: TextAlign.justify,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 16),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(
                               data.text,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Color.fromARGB(255, 227, 153, 41)),
                             ),
                             Text(
                               data.transliteration,
-                              
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(

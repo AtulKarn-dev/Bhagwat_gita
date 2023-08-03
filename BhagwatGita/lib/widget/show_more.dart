@@ -10,8 +10,8 @@ class DescriptionTextWidget extends StatefulWidget {
 }
 
 class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
-  String? firstHalf;
-  String? secondHalf;
+  late  Text firstHalf;
+  late  Text secondHalf;
 
   bool flag = true;
 
@@ -19,24 +19,24 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
   void initState() {
     super.initState();
 
-    if (widget.text!.length > 150) {
-      firstHalf = widget.text!.substring(0, 150);
-      secondHalf = widget.text!.substring(150, widget.text!.length);
+    if (widget.text!.length >150) {
+       firstHalf = Text(widget.text!);
+      secondHalf = Text(widget.text!);
     } else {
-      firstHalf = widget.text;
-      secondHalf = "";
+      firstHalf = Text(widget.text!);
+      secondHalf = const Text("");
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
       // padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      child: secondHalf!.isEmpty
-          ? Text(firstHalf!)
+      child: secondHalf.data!.isEmpty
+          ? firstHalf
           : Column(
               children: <Widget>[
-                Text(flag ? ("${firstHalf!}...") : (firstHalf! + secondHalf!),textAlign: TextAlign.justify,),
+                Container( child: flag ? Text((firstHalf.data!),maxLines:3,textAlign: TextAlign.justify,overflow: TextOverflow.ellipsis,) : Text(secondHalf.data!,textAlign: TextAlign.justify,)),
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
@@ -56,3 +56,6 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
     );
   }
 }
+
+
+

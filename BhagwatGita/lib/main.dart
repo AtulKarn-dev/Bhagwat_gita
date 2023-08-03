@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/splash_screen.dart';
+ import 'package:flutter_application_1/pages/splash_screen.dart';
+import 'package:flutter_application_1/pages/username.dart';
+// import 'package:flutter_application_1/pages/username.dart';
+
 
 void main() {
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -32,6 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
+      // home: const Splashscreen(),
       home: const Splashscreen(),
     );
   }
